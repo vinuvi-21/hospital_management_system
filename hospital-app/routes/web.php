@@ -6,4 +6,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::livewire('/view-appoinments','patient.appoinment');
+Route::get('/book-appoinment', function() {
+    return view('components.appoinment.appoinment');
+}
+)->name('appoinments.book');
