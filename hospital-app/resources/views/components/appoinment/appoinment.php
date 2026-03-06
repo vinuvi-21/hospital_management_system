@@ -2,10 +2,14 @@
 
 use Livewire\Component;
 use App\Models\Appoinment;
+use App\Models\Doctor;
 
 new class extends Component
 {
     public string $successMessage = '';
+    public $selectedSpecialization = '';
+    public $selectedDoctor = '';
+    public $doctors = [];
 
     public $name = '';
     public $nic = '';
@@ -13,7 +17,7 @@ new class extends Component
     public $phone_number = '';
     public $age = '';
     public $gender = '';
-    public $specialization = '';
+    public $specialization = [];
     public $doc_name = '';
     public $date = '';
     public $time = '';
@@ -39,6 +43,27 @@ new class extends Component
 
         $this->successMessage = 'Appointment saved successfully.';   
         $this->reset(['name', 'nic', 'email', 'phone_number', 'age', 'gender', 'specialization', 'doc_name', 'date', 'time']);
+    }
+
+    public function mount() 
+    {
+        $this ->$specialization = Doctor::select('specialization')
+              ->distinct()
+              ->pluck('specialization')
+              ->filter()
+              ->values()
+              ->toArray();
+    }
+
+    public function updatedSelectedSpecialization($value)
+    {
+        if($value){
+            $this -> doctors = Doctor::where('specialization', $value)
+            ->select('name')
+            ->get();
+        }else {
+            $this ->doctors = []; 
+        }
     }
     public function render()
     {
